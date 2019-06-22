@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import 'semantic-ui-css/semantic.min.css'
 
 /**
  * connected-react-router를 사용하기 위해서 history를 직접 만들어야 한다.
