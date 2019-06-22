@@ -1,13 +1,16 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 
-export function configureStore() {
+export function configureStore(history) {
+
     /**
      * 복수 개의 미들웨어를 사용하는 경우
      * applyMiddleware(thunk, logger, ...)
      */
     const middleware = applyMiddleware(
-        thunk
+        thunk,
+        routerMiddleware(history)
     );
 
     const composed = window.__REDUX_DEVTOOLS_EXTENSTION__ ?
@@ -16,7 +19,7 @@ export function configureStore() {
             window.__REDUX_DEVTOOLS_EXTENSTION__()
         ) :
         middleware;
-    
+
     /**
      *  createStore에 첫번 째 인자는 리듀서, 두번 째 인자는 미들웨어
      *  리듀서에도 하나의 리듀서만 들어 갈 수 있다. 만약 여러 개의 리듀서를 사용해야 하는 경우 
@@ -25,7 +28,7 @@ export function configureStore() {
      */
     return createStore(
         combineReducers({
-
+            router: connectRouter(history)
         }),
         composed
     )
