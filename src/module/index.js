@@ -15,10 +15,10 @@ export function configureStore(history) {
         routerMiddleware(history)
     );
 
-    const composed = window.__REDUX_DEVTOOLS_EXTENSTION__ ?
+    const composed = window.__REDUX_DEVTOOLS_EXTENSION__ ?
         compose(
             middleware,
-            window.__REDUX_DEVTOOLS_EXTENSTION__()
+            window.__REDUX_DEVTOOLS_EXTENSION__()
         ) :
         middleware;
 
