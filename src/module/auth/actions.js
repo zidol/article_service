@@ -14,7 +14,8 @@ export const updateUser = createAction(types.UPDATE_USER)
  
 const signInWithEmailRequest = createAction(types.SIGN_IN_WITH_EMAIL_REQUEST);
 const signInWithEmailSuccess = createAction(types.SIGN_IN_WITH_EMAIL_SUCCESS); 
-const signInWithEmailFailed = createAction(types.SIGN_IN_WITH_EMAIL_FAILED);
+//유효청 체크때 같이 쓰려고
+export const signInWithEmailFailed = createAction(types.SIGN_IN_WITH_EMAIL_FAILED);
  
 export const signInWithEmail = (email, password) => { 
     return (dispatch) => { 
@@ -36,7 +37,7 @@ export const signInWithEmail = (email, password) => {
 
  const signInWithFacebookRequest = createAction(types.SIGN_IN_WITH_FACEBOOK_REQUEST);
  const signInWithFacebookSuccess = createAction(types.SIGN_IN_WITH_FACEBOOK_SUCCESS);
- const signInWithFacebookFailed = createAction(types.SIGN_IN_WITH_FACEBOOK_FAILED);
+ export const signInWithFacebookFailed = createAction(types.SIGN_IN_WITH_FACEBOOK_FAILED);
 
 
  export const signInWithFacebook = () => { 
@@ -59,7 +60,7 @@ export const signInWithEmail = (email, password) => {
 
 const signInWithGoogleRequest = createAction(types.SIGN_IN_WITH_GOOGLE_REQUEST);
 const signInWithGoogleSuccess = createAction(types.SIGN_IN_WITH_GOOGLE_SUCCESS);
-const signInWithGoogleFailed = createAction(types.SIGN_IN_WITH_GOOGLE_FAILED);
+export const signInWithGoogleFailed = createAction(types.SIGN_IN_WITH_GOOGLE_FAILED);
 
 
 export const signInWithGoogle = () => { 
@@ -81,7 +82,7 @@ export const signInWithGoogle = () => {
 
 const signUpWithEmailRequest = createAction(types.SIGN_UP_WITH_EMAIL_REQUEST);
 const signUpWithEmailSuccess = createAction(types.SIGN_UP_WITH_EMAIL_SUCCESS); 
-const signUpWithEmailFailed = createAction(types.SIGN_UP_WITH_EMAIL_FAILED);
+export const signUpWithEmailFailed = createAction(types.SIGN_UP_WITH_EMAIL_FAILED);
  
 export const signUpWithEmail = (email, password) => { 
     return (dispatch) => { 
