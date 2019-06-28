@@ -65,7 +65,7 @@ class SignUpWithEmail extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        isLoading : state.auth.signInWithEmail.isLoading,
+        isLoading : state.auth.signUpWithEmail.isLoading,
         error : state.auth.signUpWithEmail.error
     }
 }
