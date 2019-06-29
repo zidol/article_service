@@ -35,7 +35,6 @@ class SignIn extends Component {
         return (
             <Fragment>
                 <StyledButton
-                    color="blue"
                     fluid
                     onClick={this.goToEmailLoginPage}>
                     <Icon name="mail" /> 이메일로 시작하기
