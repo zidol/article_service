@@ -58,14 +58,15 @@ export function getCommentList(articleId, lastItem, count) {
 
     if (lastItem) {
         return firebase.firestore().collection('comments')
-            .where("articleId", articleId)
+            .where("articleId", "==", articleId)
             .orderBy("createdAt", "desc")
+            //startAfter =>doc형태가 인자로 들어가야 함
             .startAfter(lastItem)
             .limit(limitCount)
             .get();
     } else {
         return firebase.firestore().collection('comments')
-            .where("articleId", articleId)
+            .where("articleId", "==", articleId)
             .orderBy("createdAt", "desc")
             .limit(limitCount)
             .get();
@@ -76,7 +77,7 @@ export function getCommentList(articleId, lastItem, count) {
 export function addComment({ userId, userDisplayName, userProfileUrl, content, articleId }) {
 
     const commentId = uuid.v1();
-    return firebase.firestore().collection('articles').doc(commentId).set({
+    return firebase.firestore().collection('comments').doc(commentId).set({
         id: commentId,
         userId,
         articleId,
@@ -85,7 +86,16 @@ export function addComment({ userId, userDisplayName, userProfileUrl, content, a
         content,
         createdAt: new Date(),
         updatedAt: new Date(),
-        displayTimestamp: new Date().toDateString.subString(0, 10)
+        displayTimestamp: new Date().toISOString().substring(0, 10)
+    }).then(() => {
+        return firebase.firestore().collection('articles').doc(articleId).get();
+    }).then((articleDoc) => {
+        const curCommentCnt = articleDoc.data().commentCnt;
+        return firebase.firestore().collection('articles').doc(articleId).set({
+            commentCnt: curCommentCnt + 1,
+        }, { merge: true })
+    }).then(() => {
+        return firebase.firestore().collection('comments').doc(commentId).get();
     });
 }
 
@@ -95,4 +105,9 @@ export function deleteArticle(articleId) {
 
 export function deleteComment(commentId) {
     return firebase.firestore().collection('comments').doc(commentId).delete();
+}
+
+
+export function getComment(commentId) {
+    return firebase.firestore().collection('comments').doc(commentId).get();
 }
