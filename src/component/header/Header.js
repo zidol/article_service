@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom'
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import * as authActions from '../../module/auth/actions';
 
 class Header extends Component {
@@ -24,41 +24,61 @@ class Header extends Component {
         this.props.history.push('/add-article')
     }
     render() {
-        return (
-            <Menu>
-                <Menu.Item header>
-                    내 서비스
-                </Menu.Item>
-
-                <Menu.Item onClick={this.goToArticleList}>
-                    게시글 리스트
-                </Menu.Item>
-
-                <Menu.Item onClick={this.goToAddArticle}>
-                    게시글 추가
-                </Menu.Item>
-
-                <Menu.Menu position="right">
-                    <Menu.Item onClick={this.goToSignInPage}>
-                        로그인
+        const { user } = this.props;
+        
+        if(user) {
+            return (
+                <Menu>
+                    <Menu.Item header>
+                        내 서비스
                     </Menu.Item>
-                    <Menu.Item onClick={this.onSignOut}>
-                        로그아웃
+    
+                    <Menu.Item onClick={this.goToArticleList}>
+                        게시글 리스트
                     </Menu.Item>
-                </Menu.Menu>
-            </Menu>
-        )
+    
+                    <Menu.Item onClick={this.goToAddArticle}>
+                        게시글 추가
+                    </Menu.Item>
+    
+                    <Menu.Menu position="right">
+                        <Menu.Item onClick={this.onSignOut}>
+                            로그아웃
+                        </Menu.Item>
+                    </Menu.Menu>
+                </Menu>
+            )
+        } else {
+            return (
+                <Menu>
+                    <Menu.Item header>
+                        내 서비스
+                    </Menu.Item>
+    
+                    <Menu.Item onClick={this.goToArticleList}>
+                        게시글 리스트
+                    </Menu.Item>
+                    <Menu.Menu position="right">
+                        <Menu.Item onClick={this.goToSignInPage}>
+                            로그인
+                        </Menu.Item>
+                    </Menu.Menu>
+                </Menu>
+            )
+        }     
+        
     }
 }
 const mapStateToProps = (state) => {
     return {
-        isLoading : state.auth.signOut.isLoading,
+        user: state.auth.user,
+        isLoading: state.auth.signOut.isLoading,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authActions : bindActionCreators(authActions, dispatch),
+        authActions: bindActionCreators(authActions, dispatch),
     }
 }
-export default connect(mapStateToProps,mapDispatchToProps) (withRouter(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
