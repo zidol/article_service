@@ -62,7 +62,7 @@ const StyledAction = styled.span`
     }
 `
 
-class ArticleListItem extends Component {
+class ArticleItem extends Component {
 
     static defaultProps = {
         id: null,
@@ -78,7 +78,7 @@ class ArticleListItem extends Component {
     }
 
     onClick = () => {
-        if(this.props.onClick) {
+        if (this.props.onClick) {
             this.props.onClick(this.props.id);
         }
     }
@@ -86,8 +86,8 @@ class ArticleListItem extends Component {
         const { userDisplayName, userProfileUrl, createdAt, content, downloadUrl, likeCnt, commentCnt } = this.props;
 
         let datetime = "";
-        if(createdAt && createdAt.seconds){
-            datetime = new Date(createdAt.seconds*1000).toISOString().substring(0, 10);
+        if (createdAt && createdAt.seconds) {
+            datetime = new Date(createdAt.seconds * 1000).toISOString().substring(0, 10);
         }
         return (        //props에 전달 되있기 때문에
             <StyledCard onClick={this.onClick}>
@@ -115,4 +115,4 @@ class ArticleListItem extends Component {
     }
 }
 
-export default ArticleListItem;
+export default ArticleItem;
