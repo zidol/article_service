@@ -23,7 +23,7 @@ class ArticleList extends Component {
         if (this.props.list.length) {
             lastItem = this.props.list[this.props.list.length - 1]
         }
-        this.props.articleActions.getArticleList(lastItem, 1);
+        this.props.articleActions.getArticleList(lastItem, 2);
     }
 
     onItemClick = (id) => {

@@ -66,7 +66,7 @@ class CommentList extends Component {
                 articleId = {item.articleId}
                 userId={item.userId}
                 content={item.content}
-                datetime={item.displayTimestamp}
+                datetime={item.displayTimeStamp}
                 name={item.userDisplayName}
                 imageUrl={item.userProfileUrl}
             />
