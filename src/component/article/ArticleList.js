@@ -14,7 +14,7 @@ class ArticleList extends Component {
     }
 
     componentDidMount() {
-        this.props.articleActions.getArticleList(null, 1);
+        this.props.articleActions.getArticleList(null, 2);
     }
 
     onLoadMore = () => {
