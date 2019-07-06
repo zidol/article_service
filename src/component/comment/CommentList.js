@@ -4,6 +4,7 @@ import {Button, Form} from 'semantic-ui-react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as articleActions from '../../module/article/actions';
+import * as authActions from '../../module/auth/actions';
 
 class CommentList extends Component {
     
@@ -49,10 +50,15 @@ class CommentList extends Component {
         if(!content){
             return;
         }
-        this.props.articleActions.addComment({
-            articleId,
-            content,
-        })
+        if(this.props.user){
+            this.props.articleActions.addComment({
+                articleId,
+                content,
+            })
+        } else {
+            this.props.authActions.openLoginModal();
+        }
+        
     }
     render() {
 
@@ -87,6 +93,7 @@ class CommentList extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        user: state.auth.user,
         list : state.article.getCommentList.list,
         isLoading : state.article.getCommentList.isLoading,
         isAddCommentLoading : state.article.addComment.isLoading,
@@ -96,6 +103,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         articleActions : bindActionCreators(articleActions, dispatch),
+        authActions : bindActionCreators(authActions, dispatch),
     }
 }
-export default  connect(mapStateToProps,mapDispatchToProps)(CommentList);
+export default  connect(mapStateToProps,mapDispatchToProps) (CommentList);

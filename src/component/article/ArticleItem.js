@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Icon } from 'semantic-ui-react';
 
 const StyledCard = styled.div`
     border : solid 1px #eee;
@@ -55,7 +56,7 @@ const StyledActions = styled.div`
 `
 
 const StyledAction = styled.span`
-    color : gray;
+    color : ${props=> props.isLiked ? "red" : "gray"};
     .count {
         margin-left : 8px;
         margin-right : 16px;
@@ -75,6 +76,7 @@ class ArticleItem extends Component {
         userDisplayName: null,
         userId: null,
         userProfileUrl: null,
+        isLiked : false,
     }
 
     onClick = () => {
@@ -82,8 +84,14 @@ class ArticleItem extends Component {
             this.props.onClick(this.props.id);
         }
     }
+
+    onClickLike = () => {
+        if (this.props.onClickLike) {
+            this.props.onClickLike(this.props.id);
+        }   
+    }
     render() {
-        const { userDisplayName, userProfileUrl, createdAt, content, downloadUrl, likeCnt, commentCnt } = this.props;
+        const { userDisplayName, userProfileUrl, createdAt, content, downloadUrl, likeCnt, commentCnt, isLiked } = this.props;
 
         let datetime = "";
         if (createdAt && createdAt.seconds) {
@@ -101,8 +109,9 @@ class ArticleItem extends Component {
                     <div className="content">{content}</div>
                 </StyledContent>
                 <StyledActions>
-                    <StyledAction>
+                    <StyledAction onClick= {this.onClickLike} isLiked={isLiked}> 
                         <span>좋아요</span>
+                        <Icon name='heart'/>
                         <span className="count">{likeCnt}</span>
                     </StyledAction>
                     <StyledAction>

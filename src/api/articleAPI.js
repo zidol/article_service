@@ -111,3 +111,52 @@ export function deleteComment(commentId) {
 export function getComment(commentId) {
     return firebase.firestore().collection('comments').doc(commentId).get();
 }
+
+export function likeArticle(articleId, userId) {
+    return firebase.firestore().collection('likes')
+        .where('articleId', '==', articleId)
+        .where('userId', '==', userId)
+        .get()
+        .then((snapshot)=> {
+            if(snapshot.docs.length){
+                const docId = snapshot.docs[0].id;
+                return firebase.firestore().collection('likes').doc(docId).delete()
+                    .then(()=> {
+                        return {
+                            isLiked: false
+                        }
+                    });
+            } else {
+                return firebase.firestore().collection('likes').add({
+                    articleId,
+                    userId,
+                })
+                .then(()=> {
+                    return {
+                        isLiked: true
+                    }
+                });
+            }
+        })
+}
+
+
+// collection('like').doc().get() => doc을 받아옴
+// collection('like').get() => snapshot을 받아옴
+export function getLike(articleId, userId) {
+    return firebase.firestore().collection('likes')
+        .where('articleId', '==', articleId)
+        .where('userId', '==', userId)
+        .get()
+        .then((snapshot) => {
+            if(snapshot.docs.length) {
+                return {
+                    isLiked : true,
+                }
+            } else {
+                return {
+                    isLiked : false
+                }
+            }
+        })
+}

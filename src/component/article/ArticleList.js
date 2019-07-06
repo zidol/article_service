@@ -14,7 +14,9 @@ class ArticleList extends Component {
     }
 
     componentDidMount() {
-        this.props.articleActions.getArticleList(null, 2);
+        if(!this.props.list.length) {
+            this.props.articleActions.getArticleList(null, 2);
+        }
     }
 
     onLoadMore = () => {
@@ -23,7 +25,7 @@ class ArticleList extends Component {
         if (this.props.list.length) {
             lastItem = this.props.list[this.props.list.length - 1]
         }
-        this.props.articleActions.getArticleList(lastItem, 2);
+        this.props.articleActions.getArticleList(lastItem, 3);
     }
 
     onItemClick = (id) => {

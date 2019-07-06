@@ -21,7 +21,11 @@ class Header extends Component {
     }
 
     goToAddArticle = e => {
-        this.props.history.push('/add-article')
+        if(this.props.user){
+            this.props.history.push('/add-article')
+        } else {
+            this.props.authActions.openLoginModal();
+        }
     }
     render() {
         const { user } = this.props;
@@ -54,9 +58,11 @@ class Header extends Component {
                     <Menu.Item header>
                         내 서비스
                     </Menu.Item>
-    
                     <Menu.Item onClick={this.goToArticleList}>
                         게시글 리스트
+                    </Menu.Item>
+                    <Menu.Item onClick={this.goToAddArticle}>
+                        게시글 추가
                     </Menu.Item>
                     <Menu.Menu position="right">
                         <Menu.Item onClick={this.goToSignInPage}>
