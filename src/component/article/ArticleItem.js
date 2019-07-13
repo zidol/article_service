@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
+import FirebaseImage from '../common/FirebaseImage';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+const sliderOption = {
+    dots : false,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+}
 
 const StyledCard = styled.div`
     border : solid 1px #eee;
@@ -67,7 +78,7 @@ class ArticleItem extends Component {
 
     static defaultProps = {
         id: null,
-        downloadUrl: null,
+        images: [],
         content: null,
         commentCnt: 0,
         likeCnt: 0,
@@ -91,12 +102,31 @@ class ArticleItem extends Component {
         }   
     }
     render() {
-        const { userDisplayName, userProfileUrl, createdAt, content, downloadUrl, likeCnt, commentCnt, isLiked } = this.props;
+        const { userDisplayName, userProfileUrl, createdAt, content, images, likeCnt, commentCnt, isLiked } = this.props;
 
         let datetime = "";
+
         if (createdAt && createdAt.seconds) {
             datetime = new Date(createdAt.seconds * 1000).toISOString().substring(0, 10);
         }
+        
+        // let src = null;
+        // if(image) {
+        //     src = image.split("/");
+        //     src[src.length - 1] = "thumb_" + src[src.length - 1];
+        //     src = src.join("/")
+        // }
+
+        const imageViews = images.map((image, index) => {
+            let temp = image.split("/");
+            temp[temp.length - 1] = "thumb_" + temp[temp.length - 1];
+            const src = temp.join("/");
+            return (
+                <div key={index}>
+                    <FirebaseImage width="100%" height={300} src={src}/>
+                </div>
+            );
+        });
         return (        //props에 전달 되있기 때문에
             <StyledCard onClick={this.onClick}>
                 <StyledHeader profileImageUrl={userProfileUrl}>
@@ -104,8 +134,8 @@ class ArticleItem extends Component {
                     <div className="user-display-name">{userDisplayName}</div>
                     <div className="datetime">{datetime}</div>
                 </StyledHeader>
-                <StyledContent imageUrl={downloadUrl}>
-                    <div className="image"></div>
+                <StyledContent>
+                    <Slider {...sliderOption}>{imageViews}</Slider>
                     <div className="content">{content}</div>
                 </StyledContent>
                 <StyledActions>

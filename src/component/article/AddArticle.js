@@ -22,7 +22,7 @@ const Preview = styled.div`
 
 class AddArticle extends Component {
     state = {
-        image: null,
+        images: [],
         content : "",
     }
     onImageChange = e => {
@@ -35,15 +35,23 @@ class AddArticle extends Component {
 
         reader.readAsDataURL(file);
 
-        reader.onload = () => {
+        reader.onload = () => 
+        {
             this.setState({
-                image: {
-                    file:file,
-                    src: reader.result
-                }
-            })
-        }
-    }
+                images : [
+                    {
+                        file:file,
+                        src: reader.result
+                    },
+                    ...this.state.images
+                ]
+            },
+            //두번쩨  이미지 올리기 위한 초기화 작업
+            () => {
+                this.refs.image.value ="";
+            });
+        };
+    };
 
     onAddImage = e=> {
         this.refs.image.click();
@@ -56,29 +64,40 @@ class AddArticle extends Component {
     }
 
     onAddArticle = e => {
-        const {image, content} = this.state;
-        if(!image) {
+        const {images, content} = this.state;
+        if(!images.length) {
             this.props.articleActions.addArticleFailed(new Error('Image required'));
             return;
         }
-
-        this.props.articleActions.addArticle({file: image.file, content});
+        const files = images.map(image => image.file);
+        this.props.articleActions.addArticle({files, content});
     }
 
-    onDeleteImage = e => {
-        this.refs.image.value = '';
+    onDeleteImage = index => {
         this.setState({
-            image: null
-        })
+            images: this.state.images.filter((item, i) => i !== index)
+        });
     }
     render () {
-        const {image, content} = this.state;
+        const {images, content} = this.state;
         const {error, isLoading} = this.props;
+
+        const list = images.map((image, index) => {
+            return (
+                <Preview 
+                    key={index}
+                    src = {image.src}
+                    onClick={() => {
+                        this.onDeleteImage(index);
+                    }}
+                />
+            )
+        })
         return (
             <Form>
                 <InvisibleUploadButton ref="image" type="file" onChange={this.onImageChange}/>
                 <Button fluid onClick={this.onAddImage}>이미지 추가</Button>
-                {image && image.src? <Preview src={image.src} onClick={this.onDeleteImage}/>: null} 
+                {list} 
                 <Form.TextArea name="content" value={content} onChange={this.onHandleChange}/>
                 <Button fluid loading={isLoading} onClick={this.onAddArticle}>게시글 추가</Button>
                 {error && error.message ? <Message> {error.message} </Message> : null}

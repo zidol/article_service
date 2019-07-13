@@ -39,7 +39,7 @@ class ArticleList extends Component {
             return <ArticleItem
                 key={item.id}
                 id={item.id}
-                downloadUrl={item.downloadUrl}
+                images={item.images}
                 content={item.content}
                 commentCnt={item.commentCnt}
                 likeCnt={item.likeCnt}

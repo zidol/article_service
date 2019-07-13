@@ -1,23 +1,27 @@
 import firebase from 'firebase';
 import uuid from 'uuid';
 
-export function addArticle({ file, content, userId, userDisplayName, userProfileUrl }) {
+export function addArticle({ files, content, userId, userDisplayName, userProfileUrl }) {
+    //upload promise를 배열에 넣어서 한번에 promiseall로 처리
+    const uploadFiles = files.map(file => {
+        const filename = uuid.v1();
+        const extension = file.name.split('.').pop();
+        const image = `articles/${filename}.${extension}`;
+        const articleRef = firebase
+            .storage()
+            .ref()
+            .child(image)
+        return articleRef.put(file).then((snapshot) => snapshot.ref.fullPath);
+    });
 
-    const filename = uuid.v1();
-    const extension = file.name.split('.').pop();
-    const url = `article/${filename}.${extension}`;
-
-    const articleRef = firebase.storage().ref().child(url);
+    // const articleRef = firebase.storage().ref().child(image);
     //promise 리턴 해줘야함 : 외부에서 써야 하기 때문에
-    return articleRef.put(file)
-        .then((snapshot) => {
-            return snapshot.ref.getDownloadURL();
-        })
-        .then((downloadUrl) => {
+    return Promise.all(uploadFiles)
+        .then(images => {
             const articleId = uuid.v1();
             return firebase.firestore().collection('articles').doc(articleId).set({
                 id: articleId,
-                downloadUrl,
+                images,
                 content,
                 userId,
                 userDisplayName,
@@ -26,8 +30,8 @@ export function addArticle({ file, content, userId, userDisplayName, userProfile
                 commentCnt: 0,
                 createdAt: new Date(),
                 updatedAt: new Date(),
-            });
-        })
+        });
+    });
 }
 
 export function getArticleList(lastItem, count) {
